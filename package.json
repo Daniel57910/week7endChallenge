@@ -2,9 +2,10 @@
   "name": "w6_end",
   "version": "1.0.0",
   "description": "currently standard CRUD web app",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha tests/units",
+    "feature": "nightwatch tests/features"
   },
   "people": {
     "author": "Daniel Miller",
@@ -15,14 +16,30 @@
     "express": "^4.16.3",
     "mongodb": "^3.0.7",
     "mongoose": "^5.0.16",
-    "pug": "^2.0.3"
+    "pug": "^2.0.3",
+    "selenium-webdriver": "^4.0.0-alpha.1",
+    "body-parser": "^1.18.2"
   },
   "devDependencies": {
+    "assert": "^1.4.1",
     "gulp": "^3.9.1",
+    "inline-environment-variables-webpack-plugin": "^1.2.1",
+    "mocha": "^5.1.1",
+    "chai": "4.1.2",
     "nightwatch": "^0.9.20",
-    "selenium-server": "^3.8.1",
-    "inline-environment-variables-webpack-plugin": "^1.2.1"
+    "selenium-server": "^3.8.1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Daniel57910/week7endChallenge.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Daniel57910/week7endChallenge/issues"
+  },
+  "homepage": "https://github.com/Daniel57910/week7endChallenge#readme"
 }

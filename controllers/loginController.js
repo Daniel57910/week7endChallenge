@@ -1,7 +1,8 @@
-let LoginInfo = {};
 
-LoginInfo.name = "Rob";
-LoginInfo.email = "test@gmail.com";
-LoginInfo.password = "123456";
+function LoginInfo () {
+  this.name = "Rob";
+  this.email = "test@gmail.com";
+  this.password = "123456";
+}
 
-module.exports = LoginInfo;
+module.exports = (loginInfo = new LoginInfo());

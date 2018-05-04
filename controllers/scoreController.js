@@ -20,12 +20,13 @@
     this.getTheScore = function (play = 4) {
       console.log(play);
       bowl = play;
-      bonusScore(bowl, total);
+      bonusScore(bowl, frame, total);
       checkForBonus(bowl, frame);
       addTheScore(bowl, total);
       pushTheScore(bowl, frame);
       console.log(frame);
       console.log(total);
+      console.log("bonus = " + bonusCount);
     };
   
   };
@@ -38,13 +39,19 @@
     frame.push(bowl);
   }
 
-  function addBonusScore(bowl, total) {
-      total[total.length - 1] += bowl;
+  function addBonusScore(bowl, frame, total) {
+    if (bowl === 10 && frame[frame.length - 1] === 10) {
+      total[total.length - 1] += bowl * 2;
+      bonusCount -= 1;
+    }
+    else {
+       total[total.length - 1] += bowl;
+    }
   }
 
-  function bonusScore(bowl, total) {
+  function bonusScore(bowl, frame, total) {
     if (bonusCount > 0) {
-      addBonusScore(bowl, total);
+      addBonusScore(bowl, frame, total);
       bonusCount -= 1;
     }
   }

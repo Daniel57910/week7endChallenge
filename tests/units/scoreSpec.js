@@ -1,31 +1,79 @@
 const assert = require('assert');
 let score = require('../../controllers/scoreController');
+tst = new score.scoreController();
+console.log(tst.total());
+ //console.log(score.scoreController.frame());
 
 describe ("ScoreController", function() {
+
   it("begins with a score representing an empty array", function() {
-    assert.equal(score.total().length, 1);
-    assert.equal(score.frame().length, 0);
+    console.log(score.scoreController);
+    let testScore = new score.scoreController(); 
+    assert.equal(testScore.total().length, 1);
+    assert.equal(testScore.frame().length, 0);
   });
+
 
   describe("BonusCount", function() {
-    it("makes the bonus count 2 if the bowl = 10 (strike", function() {
-      score.getTheScore(10);
-      assert.equal(score.bonusCount(), 2);
+    it("makes the bonus count 0 by default", function() {
+      let testScore = new score.scoreController();
+      assert.equal(testScore.bonusCount(), 0);
+    });
+     it("makes the bonus count 1 if the previous + bowl == 10", function () {
+       let testScore = new score.scoreController();
+       testScore.getTheScore(6);
+       testScore.getTheScore(4);
+       assert.equal(testScore.bonusCount(), 1);
+     });
+     it("makes the bonus count 2 if the user scores a strike", function() {
+       let testScore = new score.scoreController();
+       testScore.getTheScore(10);
+       assert.equal(testScore.bonusCount(), 2);
+     });
+  });
+
+  describe("Adding Score", function() {
+    it("adds the bowl to the most recent iteration of the score", function() {
+      let testScore = new score.scoreController();
+      testScore.getTheScore(4);
+      testScore.getTheScore(4);
+      assert.equal(testScore.total()[testScore.total().length - 1], 8);
     });
 
-    it("makes the bonus count 1 if the previous + bowl == 10", function() {
-      score.getTheScore(6);
-      score.getTheScore(4);
-      assert.equal(score.bonusCount(), 1);
+    it("doubles the next two inputs if the user scores a strike", function() {
+      let testScore = new score.scoreController();
+      testScore.getTheScore(10);
+      testScore.getTheScore(4);
+      testScore.getTheScore(4);
+      assert.equal(testScore.total()[testScore.total().length - 1], 26);
+    });
+
+    it("doubles the next input if the user scores a spare", function() {
+      let testScore = new score.scoreController();
+      testScore.getTheScore(6);
+      testScore.getTheScore(4);
+      testScore.getTheScore(4);
+      assert.equal(testScore.total()[testScore.total().length - 1], 18);
     });
   });
 
+  describe("Unique Cases", function() {
+    it("returns 30 if the user scores three strikes in a row", function() {
+      let testScore = new score.scoreController();
+      for (i = 0; i < 3; i++) {
+        testScore.getTheScore(10);
+      }
+      testScore.getTheScore(4);
+      testScore.getTheScore(5);
+      assert.equal(testScore.total()[testScore.total().length - 1], 68);
+    });
+  });
+ 
 });
 
 
+ /*
 
-
-/*
   describe("addBowl", function() {
     it("takes in an integer as an argument and shovels it into the frame array", function () {
       score.addBowl(6);
@@ -67,10 +115,4 @@ describe ("ScoreController", function() {
   });
   
 });
-
 */
-
-
-
-
-

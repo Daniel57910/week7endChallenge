@@ -1,39 +1,52 @@
-const readlineSync = require('readline-sync');
+(function (exports) {
 
-function ScoreController() {
+  ScoreController = function () {
 
-  frame = [];
-  total = [0];
-  bonusCount = 0;
+    frame = [];
+    total = [0];
+    bonusCount = 0;
+    bowl = 0;
 
-  this.frame = function () {
-    return frame;
+    this.frame = function () {
+      return frame;
+    };
+    this.total = function () {
+      return total;
+    };
+    this.bonusCount = function () {
+      return bonusCount;
+    };
+
+    this.getTheScore = function (play = 4) {
+      console.log(play);
+      bowl = play;
+      bonusScore(bowl, total);
+      checkForBonus(bowl, frame);
+      addTheScore(bowl, total);
+      pushTheScore(bowl, frame);
+      console.log(frame);
+      console.log(total);
+    };
+  
   };
-  this.total = function () {
-    return total;
-  };
-  this.bonusCount = function () {
-    return bonusCount;
-  };
 
-
-  this.getTheScore = function(play = 4){
-    bowl = Number(play);
-    console.log(bowl);
-    if (bonusCount > 0) {
-      addBonusScore(bowl, total);
-      bonusCount -=1;
-    } 
-    addTheScore(bowl, total);
-    checkForBonus(bowl, frame);
-    frame.push(bowl);
-
-  };
-
+    //frame.push(bowl);
 
   /* helper methods not to be called */
+
+  function pushTheScore(bowl, frame) {
+    frame.push(bowl);
+  }
+
   function addBonusScore(bowl, total) {
-    total[total.length - 1] += bowl;
+      total[total.length - 1] += bowl;
+  }
+
+  function bonusScore(bowl, total) {
+    if (bonusCount > 0) {
+      addBonusScore(bowl, total);
+      bonusCount -= 1;
+    }
   }
 
   function addTheScore(bowl, total) {
@@ -49,7 +62,7 @@ function ScoreController() {
     }
   }
 
-}
+  exports.scoreController = ScoreController;
+  //exports.scoreModel = new ScoreController();
 
-module.exports = scoreController = new ScoreController();
-
+})(this);

@@ -1,0 +1,6 @@
+test = require("./scoreController.js");
+test = new test.scoreController()
+test.frame()
+test.total()
+test.getTheScore(6)
+test.getTheScore(4)

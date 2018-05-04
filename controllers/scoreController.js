@@ -5,6 +5,7 @@
     frame = [];
     total = [0];
     bonusCount = 0;
+    strikeCount = 0;
     bowl = 0;
 
     this.frame = function () {
@@ -16,58 +17,67 @@
     this.bonusCount = function () {
       return bonusCount;
     };
+    this.strikeCount = function() {
+      return strikeCount;
+    };
 
-    this.getTheScore = function (play = 4) {
-      console.log(play);
-      bowl = play;
-      bonusScore(bowl, frame, total);
-      checkForBonus(bowl, frame);
-      addTheScore(bowl, total);
-      pushTheScore(bowl, frame);
+    this.playTheGame = function(play1, play2 = 0) {
+
+      current = [play1, play2];
+      frame.push(current);
+
+      if (bonusCount === 1) {
+        calculateSpare(total, current);
+        bonusCount -= 1;
+      }
+
+      if (strikeCount === 1 && play1 != 10) {
+        calculateStrike(total, current);
+      }
+
+      if (checkBonuses(current) === 1) {
+        strikeCount++;
+      }
+
+      else if (checkBonuses(current) === 2) {
+        bonusCount++;
+      }
+
+      calculateScore(total, current);
+
+      
+
       console.log(frame);
       console.log(total);
-      console.log("bonus = " + bonusCount);
+
     };
-  
+
+
   };
 
-    //frame.push(bowl);
 
-  /* helper methods not to be called */
-
-  function pushTheScore(bowl, frame) {
-    frame.push(bowl);
-  }
-
-  function addBonusScore(bowl, frame, total) {
-    if (bowl === 10 && frame[frame.length - 1] === 10) {
-      total[total.length - 1] += bowl * 2;
-      bonusCount -= 1;
+  function checkBonuses(current) {
+    if (current[0] === 10) {
+      return 1;
     }
-    else {
-       total[total.length - 1] += bowl;
+    else if (current[0] + current[1] === 10) {
+     return 2;
     }
   }
 
-  function bonusScore(bowl, frame, total) {
-    if (bonusCount > 0) {
-      addBonusScore(bowl, frame, total);
-      bonusCount -= 1;
-    }
+  function calculateSpare(total, current) {
+    total[total.length - 1] += current[0];
   }
 
-  function addTheScore(bowl, total) {
-    total.push(total[total.length - 1] + bowl);
+  function calculateStrike(total, current) {
+    total[total.length - 1] += current[0] + current[1];
   }
 
-  function checkForBonus(bowl, frame) {
-    if (bowl === 10) {
-      bonusCount += 2;
-    } 
-    else if (bowl + frame[frame.length - 1] === 10) {
-      bonusCount += 1;
-    }
+  function calculateScore(total, current) {
+    total.push(total[total.length - 1] + current[0] + current[1]);
   }
+
+
 
   exports.scoreController = ScoreController;
   //exports.scoreModel = new ScoreController();

@@ -1,6 +1,6 @@
 (function (exports) {
 
-  function ScoreController() {
+  ScoreController = function () {
 
     frame = [];
     total = [0];
@@ -18,23 +18,42 @@
     };
 
     this.getTheScore = function (play = 4) {
+      console.log(play);
       bowl = play;
+      pushTheScore(bowl, frame);
+      bonusScore(bowl, frame, total);
+      checkForBonus(bowl, frame);
+      addTheScore(bowl, total);
+      pushTheScore(bowl, frame);
+      console.log(frame);
+      console.log(total);
+      console.log("bonus = " + bonusCount);
     };
 
-    if (bonusCount > 0) {
-      addBonusScore(bowl, total);
-      bonusCount -= 1;
-    }
+  };
 
-    checkForBonus(bowl, frame);
-    addTheScore(bowl, total);
-    frame.push(bowl);
-
-  }
+  //frame.push(bowl);
 
   /* helper methods not to be called */
-  function addBonusScore(bowl, total) {
-    total[total.length - 1] += bowl;
+
+  function pushTheScore(bowl, frame) {
+    frame.push(bowl);
+  }
+
+  function addBonusScore(bowl, frame, total) {
+    if (bowl === 10 && frame[frame.length - 1] === 10) {
+      total[total.length - 1] += bowl * 2;
+      bonusCount -= 1;
+    } else {
+      total[total.length - 1] += bowl;
+    }
+  }
+
+  function bonusScore(bowl, frame, total) {
+    if (bonusCount > 0) {
+      addBonusScore(bowl, frame, total);
+      bonusCount -= 1;
+    }
   }
 
   function addTheScore(bowl, total) {

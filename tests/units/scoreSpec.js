@@ -3,35 +3,21 @@ let score = require('../../controllers/scoreController');
 
 describe ("ScoreController", function() {
   it("begins with a score representing an empty array", function() {
-    assert.equal(score.total.length, 1);
-    assert.equal(score.frame.length, 0);
+    assert.equal(score.total().length, 1);
+    assert.equal(score.frame().length, 0);
   });
 
-  describe("getTheScore", function() {
-    it("increments both the frame and the score by 1", function () {
-      score.getTheScore(4);
-      score.getTheScore(5);
-      assert.equal(score.total.length, 2);
-      assert.equal(score.frame.length, 1);
-    });
-
-    it("adds the previous score + last score dynamically", function() {
-      score.reset();
-      score.getTheScore(3);
-      score.getTheScore(3);
-      score.getTheScore(2);
-      score.getTheScore(1);
-      assert.equal(score.total[score.total.length - 1], 9);
-    });
-  });
-
-  describe("Strike", function() {
-    it("automatically calls strike in console if user scores 10", function() {
-      score.reset();
+  describe("BonusCount", function() {
+    it("makes the bonus count 2 if the bowl = 10 (strike", function() {
       score.getTheScore(10);
-
+      assert.equal(score.bonusCount(), 2);
     });
 
+    it("makes the bonus count 1 if the previous + bowl == 10", function() {
+      score.getTheScore(6);
+      score.getTheScore(4);
+      assert.equal(score.bonusCount(), 1);
+    });
   });
 
 });

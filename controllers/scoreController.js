@@ -7,6 +7,7 @@
     bonusCount = 0;
     strikeCount = 0;
     bowl = 0;
+    scores = [];
 
     this.frame = function () {
       return frame;
@@ -25,18 +26,24 @@
 
       current = [play1, play2];
       frame.push(current);
-
+  
       if (bonusCount === 1) {
         calculateSpare(total, current);
         bonusCount -= 1;
       }
 
-      if (strikeCount === 1 && play1 != 10) {
-        calculateStrike(total, current);
+      if (strikeCount >= 3) {
+        console.log("MAX BONUS");
+      }
+
+      else if (strikeCount < 3 && play1 != 10) {
+        calculateStrike(total, frame, strikeCount);
+        strikeCount--;
       }
 
       if (checkBonuses(current) === 1) {
         strikeCount++;
+        console.log(strikeCount + "strike count");
       }
 
       else if (checkBonuses(current) === 2) {
@@ -69,14 +76,19 @@
     total[total.length - 1] += current[0];
   }
 
-  function calculateStrike(total, current) {
-    total[total.length - 1] += current[0] + current[1];
+  function calculateStrike(total, frame, strikeCount) {
+    j = frame.length - 1;
+    for (i = 0; i < strikeCount; i++, j--) {
+      add = frame[j];
+      console.log("add = " + add);
+      total[total.length - 1] += add[0] + add[1];
+      console.log(total);
+    }   
   }
 
   function calculateScore(total, current) {
     total.push(total[total.length - 1] + current[0] + current[1]);
   }
-
 
 
   exports.scoreController = ScoreController;

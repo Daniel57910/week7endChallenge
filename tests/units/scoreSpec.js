@@ -57,10 +57,18 @@ describe ("ScoreController", function() {
 
     describe("The user scores a strike", function () {
       it("adds the next frame to the previous score if a user scores a strike", function () {
-         let testScore = new score.scoreController();
-         testScore.playTheGame(10);
-         testScore.playTheGame(7, 2);
-          assert.equal(testScore.total()[testScore.total().length - 1], 28);
+        let testScore = new score.scoreController();
+        testScore.playTheGame(10);
+        testScore.playTheGame(7, 2);
+        assert.equal(testScore.total()[testScore.total().length - 1], 28);
+       });
+
+       it("adds 2 consecutive strikes + a regular score to the total", function() {
+        let testScore = new score.scoreController();
+        testScore.playTheGame(10);
+        testScore.playTheGame(10);
+        testScore.playTheGame(5, 3);
+        assert.equal(testScore.total()[testScore.total().length - 1], 28);
        });
     });
    

@@ -4,7 +4,7 @@
 
     frame = [];
     total = [0];
-    bonusCount = 0;
+    spareCount = 0;
     strikeCount = 0;
     bowl = 0;
     scores = [];
@@ -18,78 +18,91 @@
     this.bonusCount = function () {
       return bonusCount;
     };
-    this.strikeCount = function() {
+    this.strikeCount = function () {
       return strikeCount;
     };
 
-    this.playTheGame = function(play1, play2 = 0) {
+    this.playTheGame = function (play1, play2 = 0) {
+      
+      checkTheScores(play1, play2, scores, frame);
 
-      current = [play1, play2];
-      frame.push(current);
-  
-      if (bonusCount === 1) {
-        calculateSpare(total, current);
-        bonusCount -= 1;
+      if (spareCount === 1) {
+        calculateSpare(total, scores);
+        spareCount--;
       }
 
-      if (strikeCount >= 3) {
-        console.log("MAX BONUS");
-      }
-
-      else if (strikeCount < 3 && play1 != 10) {
-        calculateStrike(total, frame, strikeCount);
+      else if (strikeCount === 1 && play1 != 10) {
+        calculateSingleStrike(total, scores);
         strikeCount--;
       }
 
-      if (checkBonuses(current) === 1) {
-        strikeCount++;
-        console.log(strikeCount + "strike count");
+      else if (strikeCount === 2 && play1 != 10) {
+        calculateMultipleStrikes(total, scores);
+        strikeCount--;
       }
-
-      else if (checkBonuses(current) === 2) {
-        bonusCount++;
-      }
-
-      calculateScore(total, current);
-
       
+      if (checkBonuses(play1, play2) === 1) {
+        strikeCount++;
+      }
+      else if (checkBonuses(play1, play2) === 2) {
+        spareCount++;
+      }
 
-      console.log(frame);
-      console.log(total);
-
+      console.log("scores = " + scores);
+      console.log("frames = " + frame);
+      console.log("total = " + total );
+      console.log("str c = " + strikeCount);
+      console.log("spr c = " + spareCount);
+      
     };
-
-
   };
 
+  function calculateSingleStrike(total, scores) {
+    total[total.length - 1] += scores.slice(0, 3).reduce((a, b) => a + b, 0);
+    total.push(total[total.length - 1] + scores.slice(1, 3).reduce((a, b) => a + b, 0));
+    scores.length = 0;
+  }
 
-  function checkBonuses(current) {
-    if (current[0] === 10) {
-      return 1;
+  function calculateMultipleStrikes(total, scores) {
+
+    for (i = 0; i < 2; i++) {
+      console.log("mult strike bonus = " + scores);
+      total.push(total[total.length - 1] + scores.slice(0, 3).reduce((a, b) => a + b, 0));
+      scores.shift();
+      console.log("total after shift = " + scores);
+      console.log("scores after multi bonus are " + total);
     }
-    else if (current[0] + current[1] === 10) {
-     return 2;
+    total.push(total[total.length - 1] + scores.slice(0, 2).reduce((a, b) => a + b, 0));
+  }
+  
+
+  function calculateSpare(total, scores) {
+    total[total.length - 1] += scores.slice(0, 3).reduce((a, b) => a + b, 0);
+    total.push( total[total.length - 1] + scores.slice(3, 4).reduce((a, b) => a + b, 0));
+    scores.length = 0;
+  }
+
+  function checkTheScores(play1, play2, scores, frame) {
+    if (play1 === 10) {
+      scores.push(play1);
+      frame.push(play1);
+    } 
+    else {
+      scores.push(play1);
+      scores.push(play2);
+      frame.push(play1);
+      frame.push(play2);
     }
   }
 
-  function calculateSpare(total, current) {
-    total[total.length - 1] += current[0];
+  function checkBonuses(play1, play2) {
+     if (play1 === 10) {
+       return 1;
+     }
+     if (play1 + play2 === 10) {
+       return 2;
+     }
   }
-
-  function calculateStrike(total, frame, strikeCount) {
-    j = frame.length - 1;
-    for (i = 0; i < strikeCount; i++, j--) {
-      add = frame[j];
-      console.log("add = " + add);
-      total[total.length - 1] += add[0] + add[1];
-      console.log(total);
-    }   
-  }
-
-  function calculateScore(total, current) {
-    total.push(total[total.length - 1] + current[0] + current[1]);
-  }
-
 
   exports.scoreController = ScoreController;
   //exports.scoreModel = new ScoreController();

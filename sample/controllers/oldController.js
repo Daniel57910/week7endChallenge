@@ -120,6 +120,7 @@
     }
     if (play1 + play2 === 10) {
       return 2;
+      console.log("spare bonus");
     }
   }
 
